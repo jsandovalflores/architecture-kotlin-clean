@@ -1,0 +1,98 @@
+/*
+ * *
+ *  * Created by Jorge Sandoval Flores(jorge@quebuu.com) on 30/04/18 04:38 PM
+ *  * Copyright (c) 2018 . All rights reserved.
+ *  
+ */
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'io.fabric'
+
+def keystorePropertiesFile = rootProject.file(".buildconf/keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+android {
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        applicationId "com.quebuu.architecture"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.compileSdkVersion
+        versionCode 1
+        versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+
+    buildTypes {
+
+        release {
+            minifyEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.release
+            debuggable true
+        }
+        qa {
+            signingConfig signingConfigs.release
+            debuggable true
+        }
+
+    }
+
+}
+
+kapt {
+    generateStubs = true
+}
+
+dependencies {
+    implementation project(':core-lib')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation rootProject.ext.libraries.appCompat
+    implementation rootProject.ext.libraries.constraint
+    implementation rootProject.ext.libraries.androidSupport
+    implementation rootProject.ext.libraries.designSupport
+    implementation rootProject.ext.libraries.cardView
+    implementation rootProject.ext.libraries.anko
+    implementation rootProject.ext.libraries.butterknife
+    //implementation rootProject.ext.libraries.picasso
+
+    implementation rootProject.ext.libraries.caligraphy
+    implementation rootProject.ext.libraries.dagger
+    kapt rootProject.ext.aptLibraries.daggerCompiler
+    kapt rootProject.ext.aptLibraries.butterknifeCompiler
+    implementation rootProject.ext.libraries.timber
+    implementation rootProject.ext.libraries.multiDex
+    implementation(rootProject.ext.libraries.crashLytics) {
+        transitive = true;
+    }
+
+    //testCompile rootProject.ext.testing.mockito
+    //testCompile rootProject.ext.testing.powermockJunit
+    //testCompile rootProject.ext.testing.powermockMockito
+    testImplementation rootProject.ext.testing.junit
+    androidTestImplementation rootProject.ext.testing.testSupport
+    androidTestImplementation rootProject.ext.testing.espresso
+}
+repositories {
+    mavenCentral()
+}

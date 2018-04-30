@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /**
+  ~  * Created by Jorge Sandoval Flores(jorge@quebuu.com) on 30/04/18 04:38 PM
+  ~  * Copyright (c) 2018 . All rights reserved.
+  ~  */
+  -->
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid
+        android:color="@color/colorPrimary"/>
+</shape>

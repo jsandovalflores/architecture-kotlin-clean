@@ -1,0 +1,58 @@
+/*
+ * *
+ *  * Created by Jorge Sandoval Flores(jorge@quebuu.com) on 30/04/18 04:38 PM
+ *  * Copyright (c) 2018 . All rights reserved.
+ *
+ */
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+
+    compileSdkVersion rootProject.ext.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.compileSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
+        }
+        qa {
+            debuggable true
+        }
+    }
+
+}
+
+kapt {
+    generateStubs = true
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    implementation rootProject.ext.libraries.retrofit
+    implementation rootProject.ext.libraries.retrofitGsonConverter
+    implementation rootProject.ext.libraries.androidAnnotations
+    implementation rootProject.ext.libraries.okhttpLogging
+    implementation rootProject.ext.libraries.dagger
+    kapt rootProject.ext.aptLibraries.daggerCompiler
+    implementation rootProject.ext.libraries.timber
+
+    testImplementation rootProject.ext.testing.junit
+    androidTestImplementation rootProject.ext.testing.testSupport
+    androidTestImplementation rootProject.ext.testing.espresso
+}
